@@ -1,7 +1,9 @@
 #include "main.h"
+
 /**
- * _printf - Custom printf function
- * @format: The format string
+ * _printf - Prints formatted output to stdout
+ * @format: Format string
+ *
  * Return: Number of characters printed
  */
 int _printf(const char *format, ...)
@@ -11,15 +13,13 @@ int _printf(const char *format, ...)
 
 	if (!format)
 		return (-1);
-
 	va_start(args, format);
-
-	while (format[i])
+	while (format && format[i])
 	{
-
-		if (format[i] == '%' && format[i + 1])
+		if (format[i] == '%')
 		{
 			i++;
+<<<<<<< HEAD
 
 			if (format[i] == '\0')
 				va_end(args);
@@ -38,6 +38,14 @@ int _printf(const char *format, ...)
 				count += 2;
 			}
 
+=======
+			count += handle_format(format[i], args);
+		}
+		else
+		{
+			write(1, &format[i], 1);
+			count++;
+>>>>>>> 3e486b1547740751bd9d181cef26c285f55ea185
 		}
 		i++;
 	}
