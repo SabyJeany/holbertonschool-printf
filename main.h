@@ -1,14 +1,20 @@
-#ifndef MAIN_H
-#define MAIN_H
-
+#ifndef MAIN_H_
+#define MAIN_H_
+#include <stddef.h>
 #include <stdarg.h>
-#include <unistd.h>
+#include <stdio.h>
+
+/*
+ * File: main.h
+ * Auth: Brice Kanga and Wilfried Guele.
+ * Desc: Header file containing prototypes for all functions
+ *       used in our _printf function.
+ */
 
 int _printf(const char *format, ...);
-int handle_format(char c, va_list args);
-int print_char(va_list args);
-int print_string(va_list args);
+int handle_specifiers(char specifier, va_list arguments);
+int print_character(char c);
+int print_string(char *s);
 int print_percent(void);
-int print_int(va_list args);
-
-#endif /* MAIN_H */
+int print_number(int number);
+#endif

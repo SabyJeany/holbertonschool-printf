@@ -1,53 +1,62 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <stdarg.h>
 #include "main.h"
 
 /**
- * _printf - Prints formatted output to stdout
- * @format: Format string
- *
- * Return: Number of characters printed
+ * _printf - Produce output according to a format.
+ * @format: String to print.
+ * @...: Arguments.
+ * Return: Number of characters printed (excluding the null byte).
  */
 int _printf(const char *format, ...)
 {
-	va_list args;
-	int i = 0, count = 0;
+	va_list arguments;
+	int count = 0;
+	const char *pointer = format;
 
-	if (!format)
-		return (-1);
-	va_start(args, format);
-	while (format && format[i])
+	va_start(arguments, format);
+
+	while (*pointer != '\0')
 	{
-		if (format[i] == '%')
-		{
-			i++;
-<<<<<<< HEAD
-
-			if (format[i] == '\0')
-				va_end(args);
-			if (format[i] == 'c')
-				count += print_char(args);
-			else if (format[i] == 's')
-				count += print_string(args);
-			else if (format[i] == '%')
-				count += print_percent();
-			else if (format[i] == 'd' || format[i] == 'i')
-				count += print_int(args);
-			else
-			{
-				write(1, "%", 1);
-				write(1, &format[i], 1);
-				count += 2;
-			}
-
-=======
-			count += handle_format(format[i], args);
-		}
-		else
-		{
-			write(1, &format[i], 1);
-			count++;
->>>>>>> 3e486b1547740751bd9d181cef26c285f55ea185
-		}
-		i++;
+	if (*pointer == '%')
+	{
+		pointer++;
+		count = count + handle_specifiers(*pointer, arguments);
 	}
-	return (0);
+	else
+	{
+		count = count + print_character(*pointer);
+	}
+	pointer++;
+	}
+	va_end(arguments);
+	return (count);
+}
+
+/**
+ * handle_specifiers - Handle the format specifiers.
+ * @specifier: The format specifier.
+ * @arguments: The arguments list.
+ * Return: The number of characters printed for the specifier.
+ */
+int handle_specifiers(char specifier, va_list arguments)
+{
+	int count = 0;
+
+	if (specifier == 'c')
+		count = count + print_character(va_arg(arguments, int));
+	else if (specifier == 's')
+		count = count + print_string(va_arg(arguments, char *));
+	else if (specifier == '%')
+		count = count + print_percent();
+	else if ((specifier == 'i') || (specifier == 'd'))
+		count = count + print_number(va_arg(arguments, int));
+	else
+	{
+	count += print_percent();
+	count += print_character(specifier);
+	}
+
+	return (count);
 }
