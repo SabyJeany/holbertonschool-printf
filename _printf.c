@@ -20,6 +20,9 @@ int _printf(const char *format, ...)
 		if (format[i] == '%' && format[i + 1])
 		{
 			i++;
+
+			if (format[i] == '\0')
+				va_end(args);
 			if (format[i] == 'c')
 				count += print_char(args);
 			else if (format[i] == 's')
@@ -34,14 +37,9 @@ int _printf(const char *format, ...)
 				write(1, &format[i], 1);
 				count += 2;
 			}
-		}
-		else
-		{
-			write(1, &format[i], 1);
-			count++;
+
 		}
 		i++;
 	}
-	va_end(args);
-	return (count);
+	return (0);
 }
